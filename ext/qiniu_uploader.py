@@ -11,13 +11,8 @@ import os
 
 from qiniu import Auth, put_file
 from qiniu import BucketManager
+from  config import access_key, secret_key, bucket_name
 
-access_key = 'aO-cPpe664qy_IWLOXu1yVvD6cZWQ-YHHd89bD8Q'
-secret_key = 'MaS5J7jreMCslZjPoNzuD_hfYeK0UVN9619SH2OA'
-bucket_name = 'huimouke'
-bucket_url = {
-    "huimouke": "http://opii1dlks.bkt.clouddn.com/",
-}
 
 q = Auth(access_key, secret_key)
 bucket = BucketManager(q)

@@ -5,7 +5,6 @@ import json
 import datetime
 from tornado.web import RequestHandler
 from ext import rdsession
-from mixins import DAOMixin
 
 
 class ComplexEncoder(json.JSONEncoder):
@@ -40,10 +39,10 @@ class BaseHandler(RequestHandler):
     def get_param(self, argument, argument_default=None):
         """获取请求参数"""
         if self.request.headers.get("Content-type") == 'application/json':
-            paramrs = self.request.body
-            if paramrs:
-                paramrs_dict = json.loads(paramrs)
-                _param = paramrs_dict.get(argument, argument_default)
+            params = self.request.body
+            if params:
+                params_dict = json.loads(params)
+                _param = params_dict.get(argument, argument_default)
             else:
                 _param = argument_default
         else:

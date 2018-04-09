@@ -9,3 +9,4 @@ wtforms
 qiniu
 wechatpy
 PyJWT
+werkzeug

@@ -103,10 +103,10 @@ class App:
         reload(sys)
         sys.setdefaultencoding('utf-8')
 
-        signal.signal(signal.SIGTERM, self.sig_handler)
-        signal.signal(signal.SIGQUIT, self.sig_handler)
-        signal.signal(signal.SIGINT, self.sig_handler)
-        signal.signal(signal.SIGTSTP, self.sig_handler)
+        # signal.signal(signal.SIGTERM, self.sig_handler)
+        # signal.signal(signal.SIGQUIT, self.sig_handler)
+        # signal.signal(signal.SIGINT, self.sig_handler)
+        # signal.signal(signal.SIGTSTP, self.sig_handler)
         return True
 
 

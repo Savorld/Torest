@@ -10,11 +10,13 @@ from tornado import gen
 from psycopg2.extras import RealDictCursor
 from tornado.log import app_log
 
-enable_hstore = True if os.environ.get('MOMOKO_TEST_HSTORE', False) == '1' else False
+enable_hstore = True if os.environ.get('MOMOKO_TEST_HSTORE',
+                                       False) == '1' else False
 
 
 class PostgresDB(object):
     """为降低耦合，改用一个类封装以方便传入参数"""
+
     def __init__(self, dsn, ioloop):
         self.adb_trans = []
         self.dbpool = momoko.Pool(
@@ -36,12 +38,11 @@ class PostgresDB(object):
             # This is the other way to run ioloop in sync
             ioloop.run_sync(lambda: future)
 
-        # 以下代码在Mac中会报错
-        # if self.dbpool.server_version >= 90200:
-        #     future = self.dbpool.register_json()
-        #     # This is the other way to run ioloop in sync
-        #     ioloop.run_sync(lambda: future)
-
+            # 以下代码在Mac中会报错
+            # if self.dbpool.server_version >= 90200:
+            #     future = self.dbpool.register_json()
+            #     # This is the other way to run ioloop in sync
+            #     ioloop.run_sync(lambda: future)
 
     @gen.coroutine
     def find(self, table, fields='*', condition=None, params=None):
@@ -54,14 +55,19 @@ class PostgresDB(object):
         raise gen.Return(res)
 
     @gen.coroutine
-    def select(self, table, fields='*', condition=None, offset=0, limit=10, params=None):
+    def select(self, table, fields='*', condition=None, offset=0, limit=10,
+               order=None, params=None):
         """查询多条"""
         where_str, _params = self.__conditions(condition)
         if not params:
             params = _params
-
-        select_str = "SELECT {0} FROM {1} {2} LIMIT {3} OFFSET {4}".\
-            format(fields, table, where_str, limit, offset)
+        order_str = ''
+        if order:  # 列表类型，元素为排序字段， '-'开头的字段表示倒序
+            order_str = 'ORDER BY ' + ','.join(
+                map(lambda x: x[1:] + ' DESC' if x[0] == '-' else x + ' ASC',
+                    order))
+        select_str = "SELECT {0} FROM {1} {2} {3} LIMIT {4} OFFSET {5}". \
+            format(fields, table, where_str, order_str, limit, offset)
         res = yield self.execute('select', select_str, *params)
         raise gen.Return(res)
 
@@ -71,7 +77,8 @@ class PostgresDB(object):
         where_str, _params = self.__conditions(condition)
         if not params:
             params = _params
-        count_str = "SELECT count(1) as num FROM {0} {1}".format(table, where_str)
+        count_str = "SELECT count(1) as num FROM {0} {1}".format(table,
+                                                                 where_str)
         res = yield self.execute('find', count_str, *params)
         if res:
             rv = res['num']
@@ -92,7 +99,9 @@ class PostgresDB(object):
         if not return_id:
             res = yield self.execute('exec', sql_str + insert_str, *params)
         else:
-            _res = yield self.execute('find', sql_str + insert_str + " RETURNING id", *params)
+            _res = yield self.execute('find',
+                                      sql_str + insert_str + " RETURNING id",
+                                      *params)
             res = _res.id
         raise gen.Return(res)
 
@@ -112,7 +121,8 @@ class PostgresDB(object):
             _params.extend(_params1)
             params = _params
 
-        sql_str = "UPDATE {0} SET {1} {2}".format(table, update_str, condition_str)
+        sql_str = "UPDATE {0} SET {1} {2}".format(table, update_str,
+                                                  condition_str)
         res = yield self.execute('exec', sql_str, *params)
         raise gen.Return(res)
 
@@ -179,7 +189,6 @@ class PostgresDB(object):
             self.adb_trans = []
             raise gen.Return(rv)
 
-
     def __conditions(self, condition):
         """
         查询条件，支持两种方式，字典和字符串，字符串需要用到单引号
@@ -202,7 +211,7 @@ class PostgresDB(object):
                     params.append(v)
 
             if len(l):
-                condition_sql = "where "+' AND '.join(l)
+                condition_sql = "where " + ' AND '.join(l)
             else:
                 condition_sql = ''
 
@@ -210,7 +219,6 @@ class PostgresDB(object):
             condition_sql = "WHERE " + condition
 
         return condition_sql, params
-
 
     def __get_insert_str(self, data_dict):
         """

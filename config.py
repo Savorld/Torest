@@ -22,6 +22,13 @@ STOTR_OPTIONS = {
     'redis_pass': '123kkk',
 }
 
+# 七牛配置
+access_key = 'your_access_key'
+secret_key = 'your_secret_key'
+bucket_name = 'your_bucket_name'
+# bucket_url = {
+#     "huimouke": "http://opii1dlks.bkt.clouddn.com/",
+# }
 
 # 微信公众平台相关
 WECHAT_IGNORE = False
