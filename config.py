@@ -26,9 +26,9 @@ STOTR_OPTIONS = {
 access_key = 'your_access_key'
 secret_key = 'your_secret_key'
 bucket_name = 'your_bucket_name'
-# bucket_url = {
-#     "huimouke": "http://opii1dlks.bkt.clouddn.com/",
-# }
+bucket_url = {
+    "bucket_url_key": "your-bucket_url",
+}
 
 # 微信公众平台相关
 WECHAT_IGNORE = False

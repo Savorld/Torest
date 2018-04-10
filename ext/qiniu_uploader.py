@@ -11,7 +11,7 @@ import os
 
 from qiniu import Auth, put_file
 from qiniu import BucketManager
-from  config import access_key, secret_key, bucket_name
+from config import access_key, secret_key, bucket_name, bucket_url
 
 
 q = Auth(access_key, secret_key)
