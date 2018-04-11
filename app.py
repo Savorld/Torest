@@ -46,11 +46,11 @@ class Application(tornado.web.Application):
         dsn = 'dbname=%s user=%s password=%s host=%s port=%s' %\
               (config.DB_NAME, config.DB_USER, config.DB_PASSWORD, config.DB_HOST, config.DB_PORT)
         self.db = PostgresDB(dsn, ioloop)
-        self.session_manager = rdsession.SessionManager(config.SESSION_SECRET, config.STOTR_OPTIONS)
+        self.session_manager = rdsession.SessionManager(config.SESSION_SECRET, config.STORE_OPTIONS)
         self.log = MgLog(config.MONGO_HOST, debug=config.DEBUG).logger
 
         # 创建表
-        self.maybe_create_tables()
+        # self.maybe_create_tables()
 
 
     @coroutine

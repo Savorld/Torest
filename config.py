@@ -16,7 +16,7 @@ DB_PASSWORD = 'torestpw'
 
 # session配置
 SESSION_SECRET = "3cdcb1f00803b6e78ab50b466a40b9977db396840c28307f428b25e2277f1bcc"
-STOTR_OPTIONS = {
+STORE_OPTIONS = {
     'redis_host': 'redis',
     'redis_port': 6379,
     'redis_pass': '123kkk',
